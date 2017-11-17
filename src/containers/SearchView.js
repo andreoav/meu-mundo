@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
+import { connect } from 'react-redux;'
 
 import classes from './SearchView.css';
 import ProductList from '../components/Products/ProductList';
+import * as actions from '../store/actions/actionCreators';
 
 const availableProducts = [
   {
@@ -16,14 +18,14 @@ const dataSourceConfig = {
   value: 'id',
 }
 
-export default class SearchView extends Component {
+class SearchView extends Component {
 
   state = {
     products: [],
   };
 
   productSelected(product, dataSource) {
-    console.log(product, dataSource);
+    this.props.onProductSearch(product);
   }
 
   render() {
@@ -40,3 +42,17 @@ export default class SearchView extends Component {
     );
   }
 };
+
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onProductSearch: (query) => dispatch(actions.searchProduct(query)),
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchView);;
